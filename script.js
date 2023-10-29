@@ -1,23 +1,17 @@
-const rssFeedUrl = 'https://feeds.feedburner.com/bugando';
+const rssFeedUrl = 'https://bugando.com.br/feed.php';
 
 async function fetchAndDisplayRSSFeed() {
   try {
     const response = await fetch(rssFeedUrl);
-    const text = await response.text();
-
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(text, 'text/xml');
-
-    const items = xmlDoc.querySelectorAll('item');
+    const data = await response.json();
 
     const rssFeedContainer = document.getElementById('rss-feed');
-
     rssFeedContainer.innerHTML = '';
 
-    items.forEach((item, index) => {
-      const title = item.querySelector('title').textContent;
-      const originalDescription = item.querySelector('description').textContent;
-      const link = item.querySelector('link').textContent;
+    data.forEach((item, index) => {
+      const title = item.title;
+      const originalDescription = item.description;
+      const link = item.link;
 
       const description = limitDescription(originalDescription, 150);
 
